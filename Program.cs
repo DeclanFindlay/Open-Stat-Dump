@@ -1,0 +1,149 @@
+﻿using LibreHardwareMonitor.Hardware;
+using Services.HardwareFind;
+using Utils.UserInput;
+using Models.UserSettings;
+using Services.CreateLua;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+
+internal class Program
+{
+    private static void Main()
+    {
+        JsonArray allData;
+        JsonObject userSettings;
+
+        UserSettings input = new();
+
+        string jsonExtension = ".json";
+        string luaExtension = ".lua";
+
+        List <HardwareType> hardType = new()
+        {
+            HardwareType.Cpu,
+            HardwareType.GpuNvidia
+
+        };
+        HardwareFind service = new();
+        CreateLua Lua = new();
+
+        Computer computer = new()
+        {
+            IsCpuEnabled = true,
+            IsGpuEnabled = true
+        };
+        computer.Open();
+
+        if (File.Exists("userSettings.json"))
+        {
+            input.LoadSettings = UserInput.GetBoolInput("Load Settings: (true/false):\n");
+        }
+
+        if (input.LoadSettings)
+        {
+            userSettings = JsonNode.Parse(File.ReadAllText("userSettings.json"))!.AsObject();
+
+            input.FileTypeLua = userSettings["FileTypeLua"]!.GetValue<bool>();
+            input.FileNameLua = userSettings["FileNameLua"]!.GetValue<string>();
+            input.PathLua = userSettings["PathLua"]!.GetValue<string>();
+
+            input.FileTypeJson = userSettings["FileTypeJson"]!.GetValue<bool>();
+            input.FileNameJson = userSettings["FileNameJson"]!.GetValue<string>();
+            input.PathJson = userSettings["PathJson"]!.GetValue<string>();
+
+            input.Interval = userSettings["Interval"]!.GetValue<int>();
+
+        }
+        else
+        {
+
+            Console.WriteLine("Configure Settings:\n");
+
+            input.FileTypeLua = UserInput.GetBoolInput("Do you want a .lua file (true/false):\n");
+            if (input.FileTypeLua)
+            {
+                input.FileNameLua = UserInput.GetStringInput("Enter the name of the lua file:\n" +
+                "** Make sure not to add the .lua Extension this will be done automatically");
+                input.PathLua = UserInput.GetStringInput($"Set the file path for {input.FileNameLua} file:\n" +
+                $"** End path with: \\ ");
+                Console.WriteLine($"Path set: {input.PathLua + input.FileNameLua + luaExtension}");
+            }
+            input.FileTypeJson = UserInput.GetBoolInput("Do you want a .json file (true/false):\n");
+            if (input.FileTypeJson)
+            {
+                input.FileNameJson = UserInput.GetStringInput("Enter the name of the json file:\n" +
+                "** Make sure not to add the .json Extension this will be done automatically");
+                input.PathJson = UserInput.GetStringInput($"Set the file path for {input.FileNameJson} file:\n" +
+                    $"** End path with: \\ ");
+                Console.WriteLine($"Path set: {input.PathJson + input.FileNameJson + jsonExtension}");
+            } 
+            input.Interval = UserInput.GetIntInput("Enter update interval (1000 = 1 second):\n" +
+                "Make sure not to set the interval bellow 1000");
+
+            input.SaveSettings = UserInput.GetBoolInput("Do you want to save these settings (true/false):\n");
+
+            if (input.SaveSettings)
+            {
+                userSettings = new();
+
+                userSettings["FileTypeLua"] = input.FileTypeLua;
+                userSettings["FileNameLua"] = input.FileNameLua;
+                userSettings["PathLua"] = input.PathLua;
+
+                userSettings["FileTypeJson"] = input.FileTypeJson;
+                userSettings["FileNameJson"] = input.FileNameJson;
+                userSettings["PathJson"] = input.PathJson;
+
+                userSettings["Interval"] = input.Interval;
+
+                userSettings["SaveSettings"] = input.SaveSettings;
+
+                File.WriteAllText("userSettings.json" , userSettings.ToJsonString(
+                    new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    }
+                ));
+            }
+        }
+
+        while (true)
+        {
+            Console.Clear();
+            allData = service.FindHardware(computer, hardType);
+            if (input.FileTypeLua)
+            {
+                Lua.SaveLua(input.PathLua + input.FileNameLua + luaExtension, allData);
+            }
+            if (input.FileTypeJson)
+            {
+                File.WriteAllText(input.PathJson + input.FileNameJson + jsonExtension, allData.ToJsonString(
+                    new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    }
+                ));
+            }
+            Console.WriteLine("------------------------------------------");
+            Console.WriteLine("OPEN-STAT-DUMP----------------------------");
+            Console.WriteLine("");
+            Console.WriteLine($"> running ... at interval {input.Interval}");
+            if (input.FileTypeLua)
+            {
+                Console.WriteLine($"> Lua file saved to {input.PathLua + input.FileNameLua + luaExtension}");
+            }
+            if (input.FileTypeLua)
+            {
+                Console.WriteLine($"> Json file saved to {input.PathJson + input.FileNameJson + jsonExtension}");
+            }
+            Console.WriteLine("");
+            Console.WriteLine("** Close terminal to end the program------");
+            Console.WriteLine("OPEN-STAT-DUMP----------------------------");
+            Console.WriteLine("------------------------------------------");
+
+            Thread.Sleep(input.Interval);
+        }
+
+    }
+
+}
