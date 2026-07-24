@@ -134,7 +134,7 @@ internal class Program
             {
                 Console.WriteLine($"> Lua file saved to {input.PathLua + input.FileNameLua + luaExtension}");
             }
-            if (input.FileTypeLua)
+            if (input.FileTypeJson)
             {
                 Console.WriteLine($"> Json file saved to {input.PathJson + input.FileNameJson + jsonExtension}");
             }
