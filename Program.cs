@@ -21,6 +21,8 @@ internal class Program
         List <HardwareType> hardType = new()
         {
             HardwareType.Cpu,
+            HardwareType.GpuAmd,
+            HardwareType.GpuIntel,
             HardwareType.GpuNvidia
 
         };
