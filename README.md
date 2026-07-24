@@ -1,7 +1,3 @@
-## Open-Stat-Dump -----------------------------------------------------
-
-## Overview -----------------------------------------------------
-
 Open-Stat-Dump is a windows console application that records hardware 
 statistics using LibreHardwareMonitorLib and saves them to one or more output files
 
