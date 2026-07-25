@@ -70,6 +70,11 @@ internal class Program
                 $"** End path with: \\ ");
                 Console.WriteLine($"Path set: {input.PathLua + input.FileNameLua + luaExtension}");
             }
+            else
+            {
+                input.FileNameLua = "";
+                input.PathLua = "";
+            }
             input.FileTypeJson = UserInput.GetBoolInput("Do you want a .json file (true/false):\n");
             if (input.FileTypeJson)
             {
@@ -78,10 +83,15 @@ internal class Program
                 input.PathJson = UserInput.GetStringInput($"Set the file path for {input.FileNameJson} file:\n" +
                     $"** End path with: \\ ");
                 Console.WriteLine($"Path set: {input.PathJson + input.FileNameJson + jsonExtension}");
-            } 
+            }
+            else
+            {
+                input.FileNameJson = "";
+                input.PathJson = "";
+            }
             input.Interval = UserInput.GetIntInput("Enter update interval (1000 = 1 second):\n" +
                 "Make sure not to set the interval bellow 1000");
-
+            
             input.SaveSettings = UserInput.GetBoolInput("Do you want to save these settings (true/false):\n");
 
             if (input.SaveSettings)
@@ -134,7 +144,7 @@ internal class Program
             {
                 Console.WriteLine($"> Lua file saved to {input.PathLua + input.FileNameLua + luaExtension}");
             }
-            if (input.FileTypeJson)
+            if (input.FileTypeJson == true)
             {
                 Console.WriteLine($"> Json file saved to {input.PathJson + input.FileNameJson + jsonExtension}");
             }
