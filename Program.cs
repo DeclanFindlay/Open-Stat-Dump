@@ -24,7 +24,8 @@ internal class Program
             HardwareType.GpuAmd,
             HardwareType.GpuIntel,
             HardwareType.GpuNvidia,
-            HardwareType.Network
+            HardwareType.Network,
+            HardwareType.Memory
 
         };
         HardwareFind service = new();
@@ -34,10 +35,11 @@ internal class Program
         {
             IsCpuEnabled = true,
             IsGpuEnabled = true,
-            IsNetworkEnabled = true
+            IsNetworkEnabled = true,
+            IsMemoryEnabled = true
         };
         computer.Open();
-
+        
         try
         {
             if (File.Exists("userSettings.json"))
