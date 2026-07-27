@@ -50,6 +50,7 @@ internal class Program
         {
             Console.WriteLine("ERROR::faild to open userSettings.json");
             File.WriteAllText("log.txt", ex.ToString());
+            Console.WriteLine("CHECK::log.txt for information about the error");
         }
 
 
@@ -133,6 +134,7 @@ internal class Program
                 {
                     Console.WriteLine("ERROR::failed to create userSettings.json");
                     File.WriteAllText("log.txt", ex.ToString());
+                    Console.WriteLine("CHECK::log.txt for information about the error");
                 }
 
             }
