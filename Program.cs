@@ -23,7 +23,8 @@ internal class Program
             HardwareType.Cpu,
             HardwareType.GpuAmd,
             HardwareType.GpuIntel,
-            HardwareType.GpuNvidia
+            HardwareType.GpuNvidia,
+            HardwareType.Network
 
         };
         HardwareFind service = new();
@@ -32,14 +33,23 @@ internal class Program
         Computer computer = new()
         {
             IsCpuEnabled = true,
-            IsGpuEnabled = true
+            IsGpuEnabled = true,
+            IsNetworkEnabled = true
         };
         computer.Open();
 
-        if (File.Exists("userSettings.json"))
+        try
         {
-            input.LoadSettings = UserInput.GetBoolInput("Load Settings: (true/false):\n");
+            if (File.Exists("userSettings.json"))
+            {
+                input.LoadSettings = UserInput.GetBoolInput("Load Settings: (true/false):\n");
+            }
+        }catch(Exception ex)
+        {
+            Console.WriteLine("ERROR::faild to open userSettings.json");
+            File.WriteAllText("log.txt", ex.ToString());
         }
+
 
         if (input.LoadSettings)
         {
@@ -90,7 +100,7 @@ internal class Program
                 input.PathJson = "";
             }
             input.Interval = UserInput.GetIntInput("Enter update interval (1000 = 1 second):\n" +
-                "Make sure not to set the interval bellow 1000");
+                "** Make sure not to set the interval bellow 1000");
             
             input.SaveSettings = UserInput.GetBoolInput("Do you want to save these settings (true/false):\n");
 
@@ -109,13 +119,20 @@ internal class Program
                 userSettings["Interval"] = input.Interval;
 
                 userSettings["SaveSettings"] = input.SaveSettings;
+                try
+                {
+                    File.WriteAllText("userSettings.json" , userSettings.ToJsonString(
+                        new JsonSerializerOptions
+                        {
+                            WriteIndented = true
+                        }
+                    ));
+                }catch(Exception ex)
+                {
+                    Console.WriteLine("ERROR::failed to create userSettings.json");
+                    File.WriteAllText("log.txt", ex.ToString());
+                }
 
-                File.WriteAllText("userSettings.json" , userSettings.ToJsonString(
-                    new JsonSerializerOptions
-                    {
-                        WriteIndented = true
-                    }
-                ));
             }
         }
 
@@ -123,18 +140,38 @@ internal class Program
         {
             Console.Clear();
             allData = service.FindHardware(computer, hardType);
-            if (input.FileTypeLua)
+            try
             {
-                Lua.SaveLua(input.PathLua + input.FileNameLua + luaExtension, allData);
+                if (input.FileTypeLua)
+                {
+                    Lua.SaveLua(input.PathLua + input.FileNameLua + luaExtension, allData);
+                }
+            }catch(Exception ex)
+            {
+                File.WriteAllText("log.txt", ex.ToString());
+                Console.WriteLine($"ERROR::failed to create {input.FileNameLua + luaExtension} file");
+                Console.WriteLine("CHECK::log.txt for information about the error");
             }
+
             if (input.FileTypeJson)
             {
-                File.WriteAllText(input.PathJson + input.FileNameJson + jsonExtension, allData.ToJsonString(
-                    new JsonSerializerOptions
-                    {
-                        WriteIndented = true
-                    }
-                ));
+                try
+                {
+                    File.WriteAllText(input.PathJson + input.FileNameJson + jsonExtension, allData.ToJsonString(
+                        new JsonSerializerOptions
+                        {
+                            WriteIndented = true
+                        }
+                    ));
+                }
+                catch (Exception ex)
+                {
+                    File.WriteAllText("log.txt", ex.ToString());
+                    Console.WriteLine($"ERROR::failed to create {input.FileNameJson + jsonExtension} file");
+                    Console.WriteLine("CHECK::log.txt for information about the error");
+                    break;
+                }
+
             }
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("OPEN-STAT-DUMP----------------------------");

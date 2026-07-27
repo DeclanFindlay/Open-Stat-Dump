@@ -12,7 +12,17 @@ class HardwareFind
         sensorObject["identifier"] = sensor.Identifier.ToString();
         sensorObject["sensorName"] = sensor.Name;
         sensorObject["sensorType"] = sensor.SensorType.ToString();
-        sensorObject["sensorValue"] = sensor.Value;
+        if (!sensor.Value.HasValue ||
+        float.IsNaN(sensor.Value.Value) ||
+        float.IsInfinity(sensor.Value.Value))
+        {
+            sensorObject["value"] = null;
+        }
+        else
+        {
+            sensorObject["sensorValue"] = sensor.Value;
+        }
+        
 
         return sensorObject;
     }
