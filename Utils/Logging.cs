@@ -5,7 +5,7 @@ class Logging
     private static string logPath = "log.txt";
     public static void CreateLog(string message)
     {
-        File.AppendAllText(logPath,$"{message}");
+        File.AppendAllText(logPath,$"[{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}]-----{message}");
     }
 
 
