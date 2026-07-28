@@ -5,6 +5,7 @@ using Models.UserSettings;
 using Services.CreateLua;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Utils.Logging;
 
 internal class Program
 {
@@ -17,6 +18,7 @@ internal class Program
 
         string jsonExtension = ".json";
         string luaExtension = ".lua";
+        bool firstLoop = true;
 
         List <HardwareType> hardType = new()
         {
@@ -40,34 +42,31 @@ internal class Program
         };
         computer.Open();
         
-        try
+        if (File.Exists("userSettings.json"))
         {
-            if (File.Exists("userSettings.json"))
-            {
-                input.LoadSettings = UserInput.GetBoolInput("Load Settings: (true/false):\n");
-            }
-        }catch(Exception ex)
-        {
-            Console.WriteLine("ERROR::faild to open userSettings.json");
-            File.WriteAllText("log.txt", ex.ToString());
-            Console.WriteLine("CHECK::log.txt for information about the error");
+            input.LoadSettings = UserInput.GetBoolInput("Load Settings: (true/false):\n");
         }
-
 
         if (input.LoadSettings)
         {
-            userSettings = JsonNode.Parse(File.ReadAllText("userSettings.json"))!.AsObject();
+            try
+            {
+                userSettings = JsonNode.Parse(File.ReadAllText("userSettings.json"))!.AsObject();
+                input.FileTypeLua = userSettings["FileTypeLua"]!.GetValue<bool>();
+                input.FileNameLua = userSettings["FileNameLua"]!.GetValue<string>();
+                input.PathLua = userSettings["PathLua"]!.GetValue<string>();
 
-            input.FileTypeLua = userSettings["FileTypeLua"]!.GetValue<bool>();
-            input.FileNameLua = userSettings["FileNameLua"]!.GetValue<string>();
-            input.PathLua = userSettings["PathLua"]!.GetValue<string>();
+                input.FileTypeJson = userSettings["FileTypeJson"]!.GetValue<bool>();
+                input.FileNameJson = userSettings["FileNameJson"]!.GetValue<string>();
+                input.PathJson = userSettings["PathJson"]!.GetValue<string>();
 
-            input.FileTypeJson = userSettings["FileTypeJson"]!.GetValue<bool>();
-            input.FileNameJson = userSettings["FileNameJson"]!.GetValue<string>();
-            input.PathJson = userSettings["PathJson"]!.GetValue<string>();
-
-            input.Interval = userSettings["Interval"]!.GetValue<int>();
-
+                input.Interval = userSettings["Interval"]!.GetValue<int>();
+                Logging.CreateLog($"SUCCESS::parse/load userSettings.json to json object\n");
+            }
+            catch (Exception ex)
+            {
+                Logging.CreateLog($"ERROR::faild to parse/load userSettings.json to json object\n{ex.ToString()}\n");
+            }
         }
         else
         {
@@ -130,11 +129,11 @@ internal class Program
                             WriteIndented = true
                         }
                     ));
-                }catch(Exception ex)
+                    Logging.CreateLog("SUCCESS::Save userSettings.json\n");
+                }
+                catch(Exception ex)
                 {
-                    Console.WriteLine("ERROR::failed to create userSettings.json");
-                    File.WriteAllText("log.txt", ex.ToString());
-                    Console.WriteLine("CHECK::log.txt for information about the error");
+                    Logging.CreateLog($"ERROR::failed to create/Save userSettings.json\n {ex.ToString()} \n");
                 }
 
             }
@@ -149,12 +148,15 @@ internal class Program
                 if (input.FileTypeLua)
                 {
                     Lua.SaveLua(input.PathLua + input.FileNameLua + luaExtension, allData);
+                    if (firstLoop)
+                    {
+                        Logging.CreateLog($"SUCCESS::create/save {input.FileNameLua + luaExtension} \n");
+                    }
                 }
             }catch(Exception ex)
             {
-                File.WriteAllText("log.txt", ex.ToString());
-                Console.WriteLine($"ERROR::failed to create {input.FileNameLua + luaExtension} file");
-                Console.WriteLine("CHECK::log.txt for information about the error");
+                Logging.CreateLog($"ERROR::failed to create/save {input.FileNameLua + luaExtension}\n {ex.ToString()} \n");
+                break;
             }
 
             if (input.FileTypeJson)
@@ -167,12 +169,14 @@ internal class Program
                             WriteIndented = true
                         }
                     ));
+                    if (firstLoop)
+                    {
+                        Logging.CreateLog($"SUCCESS::create/save {input.FileNameJson + jsonExtension} \n");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    File.WriteAllText("log.txt", ex.ToString());
-                    Console.WriteLine($"ERROR::failed to create {input.FileNameJson + jsonExtension} file");
-                    Console.WriteLine("CHECK::log.txt for information about the error");
+                    Logging.CreateLog($"ERROR::failed to create/save {input.FileNameJson + jsonExtension} \n{ex.ToString()}\n");
                     break;
                 }
 
@@ -195,6 +199,7 @@ internal class Program
             Console.WriteLine("------------------------------------------");
 
             Thread.Sleep(input.Interval);
+            firstLoop = false;
         }
 
     }
