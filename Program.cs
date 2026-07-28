@@ -18,6 +18,7 @@ internal class Program
 
         string jsonExtension = ".json";
         string luaExtension = ".lua";
+        bool runloop = true;
         bool firstLoop = true;
 
         List <HardwareType> hardType = new()
@@ -66,6 +67,7 @@ internal class Program
             catch (Exception ex)
             {
                 Logging.CreateLog($"ERROR::faild to parse/load userSettings.json to json object\n{ex.ToString()}\n");
+                runloop = false;
             }
         }
         else
@@ -134,73 +136,81 @@ internal class Program
                 catch(Exception ex)
                 {
                     Logging.CreateLog($"ERROR::failed to create/Save userSettings.json\n {ex.ToString()} \n");
+                    runloop = false;
                 }
 
             }
         }
-
-        while (true)
+        if (runloop)
         {
-            Console.Clear();
-            allData = service.FindHardware(computer, hardType);
-            try
+            while (true)
             {
-                if (input.FileTypeLua)
-                {
-                    Lua.SaveLua(input.PathLua + input.FileNameLua + luaExtension, allData);
-                    if (firstLoop)
-                    {
-                        Logging.CreateLog($"SUCCESS::create/save {input.FileNameLua + luaExtension} \n");
-                    }
-                }
-            }catch(Exception ex)
-            {
-                Logging.CreateLog($"ERROR::failed to create/save {input.FileNameLua + luaExtension}\n {ex.ToString()} \n");
-                break;
-            }
-
-            if (input.FileTypeJson)
-            {
+                Console.Clear();
+                allData = service.FindHardware(computer, hardType);
                 try
                 {
-                    File.WriteAllText(input.PathJson + input.FileNameJson + jsonExtension, allData.ToJsonString(
-                        new JsonSerializerOptions
-                        {
-                            WriteIndented = true
-                        }
-                    ));
-                    if (firstLoop)
+                    if (input.FileTypeLua)
                     {
-                        Logging.CreateLog($"SUCCESS::create/save {input.FileNameJson + jsonExtension} \n");
+                        Lua.SaveLua(input.PathLua + input.FileNameLua + luaExtension, allData);
+                        if (firstLoop)
+                        {
+                            Logging.CreateLog($"SUCCESS::create/save {input.FileNameLua + luaExtension} \n");
+                        }
                     }
-                }
-                catch (Exception ex)
+                }catch(Exception ex)
                 {
-                    Logging.CreateLog($"ERROR::failed to create/save {input.FileNameJson + jsonExtension} \n{ex.ToString()}\n");
+                    Logging.CreateLog($"ERROR::failed to create/save {input.FileNameLua + luaExtension}\n {ex.ToString()} \n");
                     break;
                 }
 
-            }
-            Console.WriteLine("------------------------------------------");
-            Console.WriteLine("OPEN-STAT-DUMP----------------------------");
-            Console.WriteLine("");
-            Console.WriteLine($"> running ... at interval {input.Interval}");
-            if (input.FileTypeLua)
-            {
-                Console.WriteLine($"> Lua file saved to {input.PathLua + input.FileNameLua + luaExtension}");
-            }
-            if (input.FileTypeJson == true)
-            {
-                Console.WriteLine($"> Json file saved to {input.PathJson + input.FileNameJson + jsonExtension}");
-            }
-            Console.WriteLine("");
-            Console.WriteLine("** Close terminal to end the program------");
-            Console.WriteLine("OPEN-STAT-DUMP----------------------------");
-            Console.WriteLine("------------------------------------------");
+                if (input.FileTypeJson)
+                {
+                    try
+                    {
+                        File.WriteAllText(input.PathJson + input.FileNameJson + jsonExtension, allData.ToJsonString(
+                            new JsonSerializerOptions
+                            {
+                                WriteIndented = true
+                            }
+                        ));
+                        if (firstLoop)
+                        {
+                            Logging.CreateLog($"SUCCESS::create/save {input.FileNameJson + jsonExtension} \n");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.CreateLog($"ERROR::failed to create/save {input.FileNameJson + jsonExtension} \n{ex.ToString()}\n");
+                        break;
+                    }
 
-            Thread.Sleep(input.Interval);
-            firstLoop = false;
+                }
+                Console.WriteLine("------------------------------------------");
+                Console.WriteLine("OPEN-STAT-DUMP----------------------------");
+                Console.WriteLine("");
+                Console.WriteLine($"> running ... at interval {input.Interval}");
+                if (input.FileTypeLua)
+                {
+                    Console.WriteLine($"> Lua file saved to {input.PathLua + input.FileNameLua + luaExtension}");
+                }
+                if (input.FileTypeJson == true)
+                {
+                    Console.WriteLine($"> Json file saved to {input.PathJson + input.FileNameJson + jsonExtension}");
+                }
+                Console.WriteLine("");
+                Console.WriteLine("** Close terminal to end the program------");
+                Console.WriteLine("OPEN-STAT-DUMP----------------------------");
+                Console.WriteLine("------------------------------------------");
+
+                Thread.Sleep(input.Interval);
+                firstLoop = false;
+            }
         }
+        else
+        {
+            Console.WriteLine("ERROR::check log.txt");
+        }
+
 
     }
 
