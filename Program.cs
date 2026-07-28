@@ -18,6 +18,7 @@ internal class Program
 
         string jsonExtension = ".json";
         string luaExtension = ".lua";
+        string userSettingsPath = "userSettings.json";
         bool runloop = true;
         bool firstLoop = true;
 
@@ -43,7 +44,7 @@ internal class Program
         };
         computer.Open();
         
-        if (File.Exists("userSettings.json"))
+        if (File.Exists(userSettingsPath))
         {
             input.LoadSettings = UserInput.GetBoolInput("Load Settings: (true/false):\n");
         }
@@ -52,7 +53,7 @@ internal class Program
         {
             try
             {
-                userSettings = JsonNode.Parse(File.ReadAllText("userSettings.json"))!.AsObject();
+                userSettings = JsonNode.Parse(File.ReadAllText(userSettingsPath))!.AsObject();
                 input.FileTypeLua = userSettings["FileTypeLua"]!.GetValue<bool>();
                 input.FileNameLua = userSettings["FileNameLua"]!.GetValue<string>();
                 input.PathLua = userSettings["PathLua"]!.GetValue<string>();
@@ -62,11 +63,11 @@ internal class Program
                 input.PathJson = userSettings["PathJson"]!.GetValue<string>();
 
                 input.Interval = userSettings["Interval"]!.GetValue<int>();
-                Logging.CreateLog($"SUCCESS::parse/load userSettings.json to json object\n");
+                Logging.CreateLog($"SUCCESS::parse/load {userSettingsPath} to json object\n");
             }
             catch (Exception ex)
             {
-                Logging.CreateLog($"ERROR::faild to parse/load userSettings.json to json object\n{ex.ToString()}\n");
+                Logging.CreateLog($"ERROR::faild to parse/load {userSettingsPath} to json object\n{ex.ToString()}\n");
                 runloop = false;
             }
         }
@@ -125,17 +126,17 @@ internal class Program
                 userSettings["SaveSettings"] = input.SaveSettings;
                 try
                 {
-                    File.WriteAllText("userSettings.json" , userSettings.ToJsonString(
+                    File.WriteAllText(userSettingsPath, userSettings.ToJsonString(
                         new JsonSerializerOptions
                         {
                             WriteIndented = true
                         }
                     ));
-                    Logging.CreateLog("SUCCESS::Save userSettings.json\n");
+                    Logging.CreateLog($"SUCCESS::Save {userSettingsPath}\n");
                 }
                 catch(Exception ex)
                 {
-                    Logging.CreateLog($"ERROR::failed to create/Save userSettings.json\n {ex.ToString()} \n");
+                    Logging.CreateLog($"ERROR::failed to create/Save {userSettingsPath}\n {ex.ToString()} \n");
                     runloop = false;
                 }
 
