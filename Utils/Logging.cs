@@ -6,7 +6,6 @@ class Logging
     public static void CreateLog(string message)
     {
         File.AppendAllText(logPath,$"{message}");
-        Console.WriteLine("ERROR::check log.txt");
     }
 
 
