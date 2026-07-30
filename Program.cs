@@ -13,36 +13,18 @@ internal class Program
     {
         JsonArray allData;
         JsonObject userSettings;
-
         UserSettings input = new();
+        List<HardwareType> hardType = new();
+        HardwareFind service = new();
+        CreateLua Lua = new();
+        Computer computer = new();
+        computer.Open();
 
         string jsonExtension = ".json";
         string luaExtension = ".lua";
         string userSettingsPath = "userSettings.json";
         bool runloop = true;
         bool firstLoop = true;
-
-        List <HardwareType> hardType = new()
-        {
-            HardwareType.Cpu,
-            HardwareType.GpuAmd,
-            HardwareType.GpuIntel,
-            HardwareType.GpuNvidia,
-            HardwareType.Network,
-            HardwareType.Memory
-
-        };
-        HardwareFind service = new();
-        CreateLua Lua = new();
-
-        Computer computer = new()
-        {
-            IsCpuEnabled = true,
-            IsGpuEnabled = true,
-            IsNetworkEnabled = true,
-            IsMemoryEnabled = true
-        };
-        computer.Open();
         
         if (File.Exists(userSettingsPath))
         {
@@ -106,6 +88,37 @@ internal class Program
             }
             input.Interval = UserInput.GetIntInput("Enter update interval (1000 = 1 second):\n" +
                 "** Make sure not to set the interval bellow 1000");
+
+            input.HardwareTypeCPU = UserInput.GetBoolInput("Do you want CPU stats (true/false):\n");
+            if (input.HardwareTypeCPU)
+            {
+                computer.IsCpuEnabled = true;
+                hardType.Add(HardwareType.Cpu);
+            }
+
+            input.HardwareTypeGPU = UserInput.GetBoolInput("Do you want GPU stats (true/false):\n");
+            if (input.HardwareTypeGPU)
+            {
+                computer.IsGpuEnabled = true;
+                
+                hardType.Add(HardwareType.GpuAmd);
+                hardType.Add(HardwareType.GpuIntel);
+                hardType.Add(HardwareType.GpuNvidia);
+            }
+
+            input.HardwareTypeMemory = UserInput.GetBoolInput("Do you want Memory stats(RAM) (true/false):\n");
+            if (input.HardwareTypeMemory)
+            {
+                computer.IsMemoryEnabled = true;
+                hardType.Add(HardwareType.Memory);
+            }
+            
+            input.HardwareTypeNetwork = UserInput.GetBoolInput("Do you want Network stats (true/false):\n");
+            if (input.HardwareTypeNetwork)
+            {
+                computer.IsNetworkEnabled = true;
+                hardType.Add(HardwareType.Network);
+            }
             
             input.SaveSettings = UserInput.GetBoolInput("Do you want to save these settings (true/false):\n");
 

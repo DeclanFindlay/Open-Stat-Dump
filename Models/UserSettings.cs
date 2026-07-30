@@ -1,4 +1,6 @@
 
+using LibreHardwareMonitor.Hardware;
+
 namespace Models.UserSettings;
 class UserSettings
 {
@@ -11,6 +13,12 @@ class UserSettings
     public string? PathJson {  get; set; }
 
     public int Interval { get; set; }
+
+    public bool HardwareTypeCPU { get; set; }
+    public bool HardwareTypeGPU { get; set; }
+    public bool HardwareTypeMemory { get; set; }
+    public bool HardwareTypeNetwork { get; set; }
+
     public bool SaveSettings { get; set; }
 
     public bool LoadSettings { get; set; }
