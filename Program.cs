@@ -35,6 +35,7 @@ internal class Program
         {
             try
             {
+                Console.WriteLine("Loading ...");
                 userSettings = JsonNode.Parse(File.ReadAllText(userSettingsPath))!.AsObject();
                 input.FileTypeLua = userSettings["FileTypeLua"]!.GetValue<bool>();
                 input.FileNameLua = userSettings["FileNameLua"]!.GetValue<string>();
@@ -43,6 +44,34 @@ internal class Program
                 input.FileTypeJson = userSettings["FileTypeJson"]!.GetValue<bool>();
                 input.FileNameJson = userSettings["FileNameJson"]!.GetValue<string>();
                 input.PathJson = userSettings["PathJson"]!.GetValue<string>();
+
+                input.HardwareTypeCPU = userSettings["HardwareTypeCPU"]!.GetValue<bool>();
+                if (input.HardwareTypeCPU)
+                {
+                    computer.IsCpuEnabled = true;
+                    hardType.Add(HardwareType.Cpu);
+                }
+                input.HardwareTypeGPU = userSettings["HardwareTypeGPU"]!.GetValue<bool>();
+                if (input.HardwareTypeGPU)
+                {
+                    computer.IsGpuEnabled = true;
+
+                    hardType.Add(HardwareType.GpuAmd);
+                    hardType.Add(HardwareType.GpuIntel);
+                    hardType.Add(HardwareType.GpuNvidia);
+                }
+                input.HardwareTypeMemory = userSettings["HardwareTypeMemory"]!.GetValue<bool>();
+                if (input.HardwareTypeMemory)
+                {
+                    computer.IsMemoryEnabled = true;
+                    hardType.Add(HardwareType.Memory);
+                }
+                input.HardwareTypeNetwork = userSettings["HardwareTypeNetwork"]!.GetValue<bool>();
+                if (input.HardwareTypeNetwork)
+                {
+                    computer.IsNetworkEnabled = true;
+                    hardType.Add(HardwareType.Network);
+                }
 
                 input.Interval = userSettings["Interval"]!.GetValue<int>();
                 Logging.CreateLog($"SUCCESS::parse/load {userSettingsPath} to json object\n");
@@ -135,6 +164,11 @@ internal class Program
                 userSettings["PathJson"] = input.PathJson;
 
                 userSettings["Interval"] = input.Interval;
+
+                userSettings["HardwareTypeCPU"] = input.HardwareTypeCPU;
+                userSettings["HardwareTypeGPU"] = input.HardwareTypeGPU;
+                userSettings["HardwareTypeMemory"] = input.HardwareTypeMemory;
+                userSettings["HardwareTypeNetwork"] = input.HardwareTypeNetwork;
 
                 userSettings["SaveSettings"] = input.SaveSettings;
                 try

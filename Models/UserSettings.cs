@@ -19,6 +19,8 @@ class UserSettings
     public bool HardwareTypeMemory { get; set; }
     public bool HardwareTypeNetwork { get; set; }
 
+
+
     public bool SaveSettings { get; set; }
 
     public bool LoadSettings { get; set; }
