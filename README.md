@@ -139,31 +139,40 @@ You can find LibreHardwareMonitor at
 you dont need to download this, you will be using the nuget package LibreHardwareMonitorLib 
 which will be downloaded from within visual studio, read the next section for that
 
-## How to Download and build Open-Stat-Dump 
+## How to Download, build and run Open-Stat-Dump 
+
+step 1 download:
 
 To get the Open-Stat-Dump source code run:
 ```bash
 git clone https://github.com/DeclanFindlay/Open-Stat-Dump.git
 ```
-after you run the command locate Open-Stat-Dump.sln
-
+after you run the command locate Open-Stat-Dump.sln,
 then open the Open-Stat-Dump.sln this will open the visual studio project
 
-then open the visual studio terminal and use this command to get
+step 2 setup:
+
+open the visual studio terminal and use this command to get
 LibreHardwareMonitorLib NuGet package
 ```bash
-dotnet add package LibreHardwareMonitorLib
+dotnet build
 ```
 Visual studio will now have the dependency Open-Stat-Dump needs to build
 
-make sure to set visual studios configurations to x64 and Release or
+step 3 build:
+
+make sure to set visual studio configurations to x64 and Release, or
 debug if you are modifying the code 
+
+Then build
+
+step 4 run:
 
 Once built find, bin\x64\Release\net10.0\Open-Stat-Dump.exe
 
-right click select Run as administrator 
+right click the .exe file select Run as administrator 
 
-The program should now run
+The program should now run and prompt you to configure settings
 
 ## Configuration
 
