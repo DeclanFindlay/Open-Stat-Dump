@@ -40,6 +40,79 @@ JSON / Lua
 Other applications
 ```
 
+## Output formats
+
+Example JSON output
+``` text
+[
+	{
+        "hardwareName": "12th Gen Intel Core i5-12400F",
+        "hardwareType": "Cpu",
+        "sensors": [
+            {
+                "identifier": "/intelcpu/0/temperature/8",
+                "sensorName": "CPU Package",
+                "sensorType": "Temperature",
+                "sensorValue": 48
+            },
+            {
+                // Additional sensors...
+            }
+        ]
+	},
+    {
+        "hardwareName": "NVIDIA GeForce RTX 3060",
+        "hardwareType": "GpuNvidia",
+        "sensors": [
+            {
+                "identifier": "/gpu-nvidia/0/temperature/0",
+                "sensorName": "GPU Core",
+                "sensorType": "Temperature",
+                "sensorValue": 43
+            },
+            {
+                // Additional sensors...
+            }
+        ]
+    }
+]
+```
+
+Note: The examples are shortened for readability. The actual ouput
+contains all available hardware and sensors
+
+Example Lua output
+```text 
+return{
+    {
+        hardwareName = "12th Gen Intel Core i5-12400F",
+        hardwareType = "Cpu",
+        sensors = {
+            {
+                identifier = "/intelcpu/0/load/2",
+                sensorName = "CPU Core #1 Thread #1",
+                sensorType = "Load",
+                sensorValue = 2.13,
+            },
+            {
+                // Additional sensors...
+            }
+        hardwareName = "NVIDIA GeForce RTX 3060",
+        hardwareType = "GpuNvidia",
+        sensors = {
+            {
+                identifier = "/gpu-nvidia/0/temperature/0",
+                sensorName = "GPU Core",
+                sensorType = "Temperature",
+                sensorValue = 45,
+            },
+            {
+                // Additional sensors...
+            }
+    }
+}
+```
+
 ## Prerequisites/notes 
 
 Tools:
