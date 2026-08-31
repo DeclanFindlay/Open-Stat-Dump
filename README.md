@@ -43,7 +43,7 @@ Other applications
 ## Output formats
 
 Example JSON output
-``` text
+``` json
 [
 	{
         "hardwareName": "12th Gen Intel Core i5-12400F",
@@ -82,7 +82,7 @@ Note: The examples are shortened for readability. The actual ouput
 contains all available hardware and sensors
 
 Example Lua output
-```text 
+```lua 
 return{
     {
         hardwareName = "12th Gen Intel Core i5-12400F",
@@ -97,6 +97,9 @@ return{
             {
                 // Additional sensors...
             }
+        }
+    },
+    {
         hardwareName = "NVIDIA GeForce RTX 3060",
         hardwareType = "GpuNvidia",
         sensors = {
@@ -109,6 +112,7 @@ return{
             {
                 // Additional sensors...
             }
+        }
     }
 }
 ```
