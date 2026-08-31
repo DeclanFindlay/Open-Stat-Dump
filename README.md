@@ -171,7 +171,8 @@ When Open-stat-Dump starts, it will prompt you to configure:
 
 - file type
 - file name
-- file output location,
+- file output location
+
 It will repeat these steps for each file type
 
 next:
