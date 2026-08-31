@@ -1,7 +1,23 @@
 # Open-Stat-Dump 
 
-Open-Stat-Dump is a windows console application that records hardware 
-statistics using LibreHardwareMonitorLib and saves them to one or more output files
+Open-Stat-Dump is a windows console application that reads hardware and system 
+statistics and continuously writes them to JSON and Lua files for other
+applications to consume
+
+It is designed to act as a bridge between hardware monitoring software
+and other applications, such as GUI widgets, overlays, dashboards, or game interfaces
+
+## Example
+
+Open-Stat-Dump can be used as a data source for applications such as
+in-game widgets and overlays
+
+<p>
+	<img src="images/widget_Example.png" width="600">
+</p>
+
+The widget can be found here
+[GUI widget](https://github.com/DeclanFindlay/Open-Stat-Dump-BAR_Widget)
 
 ## Prerequisites/notes 
 
