@@ -19,6 +19,27 @@ in-game widgets and overlays
 The widget can be found here
 [GUI widget](https://github.com/DeclanFindlay/Open-Stat-Dump-BAR_Widget)
 
+## How it works
+
+Open-Stat-Dump uses LibreHardwareMonitorLib to access hardware information
+
+The program periodically reads the available hardware sensors and writes the
+selected statistics to one or more ouput files
+
+Other applications can then read these files and use the data
+
+``` text
+Hardware
+↓
+LibreHardwareMonitorLib
+↓
+Open-Stat-Dump
+↓
+JSON / Lua
+↓
+Other applications
+```
+
 ## Prerequisites/notes 
 
 Tools:
