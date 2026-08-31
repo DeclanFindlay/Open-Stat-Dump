@@ -147,17 +147,20 @@ To get the Open-Stat-Dump source code run:
 ```bash
 git clone https://github.com/DeclanFindlay/Open-Stat-Dump.git
 ```
-after you run the command locate Open-Stat-Dump.sln,
-then open the Open-Stat-Dump.sln this will open the visual studio project
+after you run the command locate Open-Stat-Dump.slnx,
+then open the Open-Stat-Dump.slnx this will open the visual studio project
 
 step 2 setup:
 
-open the visual studio terminal and use this command to get
-LibreHardwareMonitorLib NuGet package
+The project includes LibreHardwareMonitorLib as a NuGet dependency in the .csproj file
+
+Visual Studio will automatically restore the dependency when the project is built
+
+You can also restore the dependencies manually,
+open the visual studio terminal and use this command
 ```bash
-dotnet build
+dotnet restore
 ```
-Visual studio will now have the dependency Open-Stat-Dump needs to build
 
 step 3 build:
 
