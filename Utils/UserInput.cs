@@ -41,8 +41,15 @@ internal class UserInput
         {
             string? input = Console.ReadLine();
 
+
             if (int.TryParse(input, out int value))
             {
+                if(value < 1000)
+                {
+                    Console.WriteLine("The value must be 1000 or higher");
+                    continue;
+                }
+
                 return value;
 
             }
