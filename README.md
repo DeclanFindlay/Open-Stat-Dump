@@ -140,8 +140,8 @@ Mozilla Public License 2.0
 
 You can find LibreHardwareMonitor at
 [LibreHardwareMonitor GitHub repository](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor)
-you dont need to download this, you will be using the nuget package LibreHardwareMonitorLib 
-which will be downloaded from within visual studio, read the next section for that
+you dont need to download this manually, the package is declared in the projects .csproj file and will
+be automatically restored when the project is built
 
 ## How to Download, build and run Open-Stat-Dump 
 
