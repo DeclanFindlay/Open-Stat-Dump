@@ -165,21 +165,20 @@ right click select Run as administrator
 
 The program should now run
 
-## Functionality 
+## Configuration
 
-This program will run in the terminal, you will be prompted to configure settings 
-after that it will run and save the system statistics to one or more files
+When Open-stat-Dump starts, it will prompt you to configure:
 
-It will continue to update and save the statistics to that file/files based on the 
-interval and settings you pick, current file types available
-- json
-- lua 
+- file type
+- file name
+- file output
+It will repeat this for each file type
 
->\*\*Note:\*\* make sure to leave the terminal open to continue running 
+next:
 
-To end the program just simply close the terminal 
-
-The files will remain after you end the program 
+- interval
+- hardware types
+- save settings
 
 ## License 
 
