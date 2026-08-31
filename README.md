@@ -115,15 +115,13 @@ return{
 
 ## Prerequisites/notes 
 
-Tools:
-
+- windows only
 - visual studio 2022
-- .NET Desktop Development workload for C#
+- .NET Desktop Development workload for C#, (using net 10)
 - Git
+- Administrator privileges when accessing certain hardware sensors
 
-Open-Stat-Dump is windows only 
-
-You will need to build from source to use this program
+You will need to build from source to use this program, there is no prebuilt binaries
 
 The Dependency LibreHardwareMonitorLib NuGet package requires elevated privileges on many systems
 to access certain hardware sensors, such as CPU temperature and other low-level hardware
