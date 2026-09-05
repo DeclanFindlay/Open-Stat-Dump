@@ -1,8 +1,8 @@
 
 using LibreHardwareMonitor.Hardware;
 
-namespace Models.UserSettings;
-class UserSettings
+namespace Models.UserSettingsModel;
+class UserSettingsModel
 {
     public bool FileTypeLua {  get; set; }
     public string? FileNameLua { get; set; }
@@ -22,6 +22,8 @@ class UserSettings
 
 
     public bool SaveSettings { get; set; }
+
+    public string? UserSettingsPath {  get; set; }
 
     public bool LoadSettings { get; set; }
 }
