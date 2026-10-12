@@ -9,7 +9,13 @@ and other applications, such as GUI widgets, overlays, dashboards, or game inter
 
 ## Example
 
-Open-Stat-Dump can be used as a data source for applications such as
+Open-stat-Dumps dashboard is run in the browser at [http://localhost:5055](http://localhost:5055)
+
+<p>
+	<img src="images/dashboard.png" width="600">
+</p>
+
+Open-Stat-Dump can also be used as a data source for applications such as
 in-game widgets and overlays
 
 <p>
