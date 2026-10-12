@@ -1,14 +1,17 @@
-﻿using System;
+﻿using LibreHardwareMonitor.Hardware;
+using Services;
+using Services.CreateLua;
+using Services.HardwareFind;
+using Services.UserSettings;
+using Services.StatsStore;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using LibreHardwareMonitor.Hardware;
-using Services.HardwareFind;
-using Utils.UserInput;
-using Services.UserSettings;
-using Services.CreateLua;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading;
 using Utils.Logging;
+using Utils.UserInput;
 
 namespace Application.OpenStatDumpApp
 {
@@ -25,6 +28,13 @@ namespace Application.OpenStatDumpApp
 
         private bool findSavedSettings;
         private bool firstLoop = true;
+
+        private readonly StatsStore statsStore;
+
+        public OpenStatDumpApp(StatsStore statsStore)
+        {
+            this.statsStore = statsStore;
+        }
 
         public void Init()
         {
@@ -50,12 +60,29 @@ namespace Application.OpenStatDumpApp
             }
         }
 
-        public void Run()
+        public void Run(CancellationToken token)
         {
-            while (true)
+            Console.WriteLine("------------------------------------------");
+            Console.WriteLine("OPEN-STAT-DUMP----------------------------");
+            Console.WriteLine("");
+            Console.WriteLine($"> running ... at interval {settings.GetInterval()}");
+            if (settings.IsFileTypeLua())
             {
-                Console.Clear();
+                Console.WriteLine($"> Lua file saved to {settings.GetLuaPath()}");
+            }
+            if (settings.IsFileTypeJson())
+            {
+                Console.WriteLine($"> Json file saved to {settings.GetJsonPath()}");
+            }
+            Console.WriteLine("");
+            Console.WriteLine("OPEN-STAT-DUMP----------------------------");
+            Console.WriteLine("------------------------------------------");
+
+            while (!token.IsCancellationRequested)
+            {
                 allData = service.FindHardware(computer, settings.GetHardwareTypes());
+                statsStore.Update(allData);
+
                 try
                 {
                     if (settings.IsFileTypeLua())
@@ -95,24 +122,11 @@ namespace Application.OpenStatDumpApp
                     }
 
                 }
-                Console.WriteLine("------------------------------------------");
-                Console.WriteLine("OPEN-STAT-DUMP----------------------------");
-                Console.WriteLine("");
-                Console.WriteLine($"> running ... at interval {settings.GetInterval()}");
-                if (settings.IsFileTypeLua())
+                if (token.WaitHandle.WaitOne(settings.GetInterval()))
                 {
-                    Console.WriteLine($"> Lua file saved to {settings.GetLuaPath()}");
+                    break;
                 }
-                if (settings.IsFileTypeJson())
-                {
-                    Console.WriteLine($"> Json file saved to {settings.GetJsonPath()}");
-                }
-                Console.WriteLine("");
-                Console.WriteLine("** Close terminal to end the program------");
-                Console.WriteLine("OPEN-STAT-DUMP----------------------------");
-                Console.WriteLine("------------------------------------------");
 
-                Thread.Sleep(settings.GetInterval());
                 firstLoop = false;
             }
         }
