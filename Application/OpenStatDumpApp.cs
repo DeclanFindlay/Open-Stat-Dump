@@ -56,7 +56,10 @@ namespace Application.OpenStatDumpApp
             {
                 settings.ConfigSettings(computer);
 
-                settings.SaveSettings();
+                if (settings.ShouldSaveSettings())
+                {
+                    settings.SaveSettings();
+                }
             }
         }
 

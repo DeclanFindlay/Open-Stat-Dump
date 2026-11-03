@@ -203,4 +203,9 @@ internal class UserSettings
             }
         ));
     }
+
+    public bool ShouldSaveSettings()
+    {
+        return settings.SaveSettings;
+    }
 }
