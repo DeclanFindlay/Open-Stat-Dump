@@ -4,6 +4,9 @@ Open-Stat-Dump is a windows console application that reads hardware and system
 statistics and continuously writes them to JSON and Lua files for other
 applications to consume
 
+You can also use Open-Stat-Dump without creating files and just see the selected
+hardware stats in the browser dashboard
+
 It is designed to act as a bridge between hardware monitoring software
 and other applications, such as GUI widgets, overlays, dashboards, or game interfaces
 
@@ -22,7 +25,7 @@ in-game widgets and overlays
 	<img src="images/widget_Example.png" width="600">
 </p>
 
-The widget can be found here
+This widget can be found here
 [GUI widget](https://github.com/DeclanFindlay/Open-Stat-Dump-BAR_Widget)
 
 ## How it works
@@ -43,7 +46,7 @@ Open-Stat-Dump
 ↓
 JSON / Lua
 ↓
-Other applications
+The browser Dashboard or Other applications
 ```
 
 ## Output formats
@@ -84,7 +87,7 @@ Example JSON output
 ]
 ```
 
-Note: The examples are shortened for readability. The actual ouput
+Note: The examples are shortened for readability. The actual output
 contains all available hardware and sensors
 
 Example Lua output
@@ -153,10 +156,12 @@ be automatically restored when the project is built
 
 step 1 download:
 
-To get the Open-Stat-Dump source code run:
+To get the Open-Stat-Dump source code using the terminal run:
 ```bash
 git clone https://github.com/DeclanFindlay/Open-Stat-Dump.git
 ```
+or download the ZIP
+
 after you run the command locate Open-Stat-Dump.slnx,
 then open the Open-Stat-Dump.slnx this will open the visual studio project
 
