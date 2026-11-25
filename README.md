@@ -10,6 +10,10 @@ hardware stats in the browser dashboard
 It is designed to act as a bridge between hardware monitoring software
 and other applications, such as GUI widgets, overlays, dashboards, or game interfaces
 
+## API documentation
+
+[API.md](https://github.com/DeclanFindlay/Open-Stat-Dump/blob/main/doc/API.md)
+
 ## Example
 
 Open-stat-Dumps dashboard is run in the browser at [http://localhost:5055](http://localhost:5055)
