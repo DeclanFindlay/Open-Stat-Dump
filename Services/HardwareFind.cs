@@ -16,7 +16,7 @@ class HardwareFind
         float.IsNaN(sensor.Value.Value) ||
         float.IsInfinity(sensor.Value.Value))
         {
-            sensorObject["value"] = null;
+            sensorObject["sensorValue"] = null;
         }
         else
         {
